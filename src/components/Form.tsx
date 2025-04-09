@@ -24,12 +24,12 @@ const Form = () => {
       if (res.ok) {
         toast.success('🎉 Registration Successful!');
         setShowConfetti(true);
-
-        // Optional: Clear form fields
         form.reset();
 
-        // Hide confetti after 5 seconds
-        setTimeout(() => setShowConfetti(false), 5000);
+        setTimeout(() => {
+          setShowConfetti(false);
+          window.location.href = "/ThankYou"; // ✅ Redirect to ThankYou page
+        }, 3000); // 3-second delay for confetti
       } else {
         toast.error('Something went wrong.');
       }

@@ -7,7 +7,10 @@ import InfoSection from "@/components/InfoSection";
 import Learnings from "@/components/Learnings";
 import Speaker from "@/components/Speaker";
 import Testimonials from "@/components/Testimonials";
+import ThankYou from '@/components/ThankYou';
 
+
+export default ThankYou;
 export default function Home() {
   return (
     <main className="flex flex-col items-center px-4 sm:px-8">
@@ -15,6 +18,8 @@ export default function Home() {
       <section className="py-16 text-center w-full">
         <Hero />
       </section>
+
+      
 
       {/* 📝 FORM SECTION */}
       <section className="py-12 w-full max-w-xl">
