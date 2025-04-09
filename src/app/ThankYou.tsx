@@ -1,42 +1,42 @@
-// src/app/thankyou/page.tsx
-"use client";
-
-import { motion } from "framer-motion";
-import Link from "next/link";
+'use client';
+import { useEffect } from 'react';
+import confetti from 'canvas-confetti';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  }, []);
+
   return (
-    <main className="min-h-screen bg-black flex flex-col justify-center items-center px-6 text-center text-white">
+    <main className="min-h-screen flex flex-col items-center justify-center bg-white text-black text-center p-6">
       <motion.h1
+        className="text-4xl font-bold mb-4"
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="text-4xl md:text-5xl font-bold mb-4"
+        transition={{ duration: 0.5 }}
       >
         🎉 Thank You for Registering!
       </motion.h1>
-
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.8 }}
-        className="text-lg md:text-xl max-w-xl mb-6 text-gray-300"
+        className="text-lg mb-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
       >
-        You’ve successfully registered for the UX Design Masterclass. <br />
-        Check your email for further updates!
+        We’ll get back to you shortly with more details. Stay tuned!
       </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 0.8, duration: 0.6 }}
+      <Link
+        href="/"
+        className="bg-black text-white px-6 py-2 rounded-full hover:bg-gray-800 transition duration-300"
       >
-        <Link href="/">
-          <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-all">
-            Back to Home
-          </button>
-        </Link>
-      </motion.div>
+        Go back to Home
+      </Link>
     </main>
   );
 }
