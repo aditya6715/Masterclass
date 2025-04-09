@@ -1,100 +1,76 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import toast from "react-hot-toast";
-import confetti from "canvas-confetti";
+import React, { useState } from 'react';
+import toast, { Toaster } from 'react-hot-toast';
+import Confetti from 'react-confetti';
+import { useWindowSize } from 'react-use';
 
-const fireConfetti = () => {
-  confetti({
-    particleCount: 150,
-    spread: 70,
-    origin: { y: 0.6 },
-  });
-};
-
-export default function Form() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
+const Form = () => {
+  const [showConfetti, setShowConfetti] = useState(false);
+  const { width, height } = useWindowSize();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch(
-      "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec",
-      {
-        method: "POST",
-        body: JSON.stringify(formData),
-        headers: { "Content-Type": "application/json" },
-      }
-    );
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
 
-    if (res.ok) {
-      toast.success("Successfully registered! 🎉");
-      fireConfetti();
-      setFormData({ name: "", email: "", phone: "" });
-    } else {
-      toast.error("Submission failed. Please try again.");
+    try {
+      const res = await fetch('/api/submit', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (res.ok) {
+        toast.success('🎉 Registration Successful!');
+        setShowConfetti(true);
+
+        // Optional: Clear form fields
+        form.reset();
+
+        // Hide confetti after 5 seconds
+        setTimeout(() => setShowConfetti(false), 5000);
+      } else {
+        toast.error('Something went wrong.');
+      }
+    } catch (err) {
+      toast.error('Error submitting form!');
     }
   };
 
   return (
-    <motion.div
-      className="bg-gradient-to-br from-purple-100 via-white to-blue-100 p-6 rounded-2xl shadow-xl max-w-xl mx-auto mt-10"
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-    >
-      <h2 className="text-2xl font-bold mb-6 text-center">Register Now</h2>
+    <div className="relative">
+      <Toaster position="top-right" reverseOrder={false} />
+      {showConfetti && <Confetti width={width} height={height} numberOfPieces={200} />}
 
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-4 p-6 bg-white rounded-xl shadow-md max-w-md mx-auto">
+        <h2 className="text-xl font-bold mb-4 text-center">Register for the Masterclass</h2>
+
         <input
-          type="text"
           name="name"
+          type="text"
+          required
           placeholder="Your Name"
-          value={formData.name}
-          onChange={handleChange}
-          required
-          className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Your Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-          className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
-        />
-        <input
-          type="tel"
-          name="phone"
-          placeholder="Your Phone Number"
-          value={formData.phone}
-          onChange={handleChange}
-          required
-          className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
         />
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
+        <input
+          name="email"
+          type="email"
+          required
+          placeholder="Your Email"
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring"
+        />
+
+        <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold shadow-md hover:bg-blue-700 transition"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-lg transition duration-300"
         >
           Submit
-        </motion.button>
+        </button>
       </form>
-    </motion.div>
+    </div>
   );
-}
+};
+
+export default Form;
