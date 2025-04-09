@@ -1,15 +1,22 @@
-// app/thankyou/page.tsx (or wherever your routing points)
+// app/thankyou/page.tsx
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import ConfettiExplosion from "react-confetti-explosion";
+
 
 export default function ThankYouPage() {
+  useEffect(() => {
+    confetti({
+      particleCount: 150,
+      spread: 100,
+      origin: { y: 0.6 },
+    });
+  }, []);
+
   return (
     <main className="min-h-screen bg-black flex flex-col justify-center items-center px-6 text-center text-white">
-      <ConfettiExplosion />
-
       <motion.h1
         initial={{ opacity: 0, y: -30 }}
         animate={{ opacity: 1, y: 0 }}
