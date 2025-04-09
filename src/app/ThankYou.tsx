@@ -1,20 +1,10 @@
-// app/thankyou/page.tsx
+// src/app/thankyou/page.tsx
 "use client";
 
-import { useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 
-
 export default function ThankYouPage() {
-  useEffect(() => {
-    confetti({
-      particleCount: 150,
-      spread: 100,
-      origin: { y: 0.6 },
-    });
-  }, []);
-
   return (
     <main className="min-h-screen bg-black flex flex-col justify-center items-center px-6 text-center text-white">
       <motion.h1
